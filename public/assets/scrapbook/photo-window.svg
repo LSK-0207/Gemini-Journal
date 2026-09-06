@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="100%" height="100%">
+  <defs>
+    <linearGradient id="warm-indoor-grad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#fffbeb"/>
+      <stop offset="60%" stop-color="#fef3c7"/>
+      <stop offset="100%" stop-color="#fed7aa"/>
+    </linearGradient>
+  </defs>
+  <rect width="200" height="200" fill="url(#warm-indoor-grad)"/>
+  <!-- French window frame -->
+  <rect x="25" y="20" width="150" height="130" fill="#bae6fd" opacity="0.6" stroke="#78350f" stroke-width="4"/>
+  <line x1="100" y1="20" x2="100" y2="150" stroke="#78350f" stroke-width="3"/>
+  <line x1="25" y1="85" x2="175" y2="85" stroke="#78350f" stroke-width="3"/>
+  <!-- Sunlight ray -->
+  <polygon points="100,20 180,20 200,200 80,200" fill="#fff" opacity="0.25"/>
+  <!-- Wooden sill -->
+  <rect x="15" y="146" width="170" height="14" rx="2" fill="#92400e" stroke="#78350f" stroke-width="1.5"/>
+  <!-- Vase with dried wildflowers on sill -->
+  <path d="M50,146 L45,120 Q50,110 55,110 Q60,110 65,120 L60,146 Z" fill="#e0e7ff" stroke="#6366f1" stroke-width="1"/>
+  <!-- Dried flowers sprouting from vase -->
+  <circle cx="48" cy="98" r="7" fill="#f472b6"/>
+  <circle cx="62" cy="92" r="8" fill="#fbbf24"/>
+  <circle cx="55" cy="80" r="9" fill="#f43f5e"/>
+  <!-- Coffee mug -->
+  <rect x="120" y="132" width="22" height="16" rx="2" fill="#fff" stroke="#d97706" stroke-width="1"/>
+  <path d="M142,135 Q149,139 142,143" fill="none" stroke="#d97706" stroke-width="1.5"/>
+</svg>

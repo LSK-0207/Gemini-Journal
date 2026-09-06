@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 60" width="100%" height="100%">
+  <defs>
+    <pattern id="gingham-pink" width="20" height="20" patternUnits="userSpaceOnUse">
+      <rect width="20" height="20" fill="#fff5f5"/>
+      <rect x="0" y="0" width="10" height="20" fill="#fed7d7" opacity="0.6"/>
+      <rect x="0" y="0" width="20" height="10" fill="#fed7d7" opacity="0.6"/>
+      <rect x="0" y="0" width="10" height="10" fill="#fbb6ce" opacity="0.5"/>
+    </pattern>
+  </defs>
+  <path d="M0,0 L400,0 L400,22 Q385,32 370,18 Q355,10 340,24 Q325,36 310,19 Q295,12 280,26 Q265,38 250,21 Q235,11 220,27 Q205,39 190,22 Q175,13 160,28 Q145,41 130,23 Q115,12 100,29 Q85,42 70,24 Q55,14 40,30 Q25,43 10,25 L0,20 Z" fill="url(#gingham-pink)"/>
+  <path d="M0,20 Q15,33 30,19 Q45,11 60,27 Q75,40 90,22 Q105,11 120,28 Q135,42 150,23 Q165,12 180,29 Q195,43 210,24 Q225,11 240,29 Q255,43 270,24 Q285,13 300,31 Q315,44 330,26 Q345,13 360,31 Q375,45 390,25 L400,22" fill="none" stroke="#e2b8c2" stroke-width="1.2" stroke-dasharray="2,2"/>
+</svg>

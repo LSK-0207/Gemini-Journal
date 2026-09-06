@@ -1,0 +1,75 @@
+<svg viewBox="0 0 560 860" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <pattern id="dotsSunlitV" width="16" height="16" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="0.8" fill="#e9dfc4" opacity="0.6"/>
+    </pattern>
+    <filter id="shadowSunlitV" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#5a4632" flood-opacity="0.18"/>
+    </filter>
+  </defs>
+
+  <!-- base paper -->
+  <rect width="560" height="860" rx="18" fill="#fdf6e3"/>
+  <rect width="560" height="860" rx="18" fill="url(#dotsSunlitV)"/>
+  <rect x="6" y="6" width="548" height="848" rx="14" fill="none" stroke="#f4c95d" stroke-width="6"/>
+
+  <!-- torn paper strip, top-left -->
+  <path d="M 20,10 L 120,10 L 116,26 L 132,20 L 140,34 L 128,44 L 20,44 Z"
+        fill="#fbeecb" stroke="#e0c98a" stroke-width="1" filter="url(#shadowSunlitV)"/>
+
+  <!-- washi tape, top center -->
+  <g transform="rotate(-3 380 30)">
+    <rect x="320" y="16" width="120" height="28" fill="#f0a94e" opacity="0.55"/>
+  </g>
+
+  <!-- compass star, top-right -->
+  <g transform="translate(500,45)">
+    <path d="M0,-16 L4,-4 L16,0 L4,4 L0,16 L-4,4 L-16,0 L-4,-4 Z" fill="#f0a94e"/>
+    <circle cx="0" cy="0" r="4" fill="#5a4632"/>
+  </g>
+
+  <!-- stacked card backings for vertical slots -->
+  <rect x="40" y="90"  width="480" height="70"  rx="10" fill="#ffffff" opacity="0.88" filter="url(#shadowSunlitV)"/>
+  <rect x="40" y="180" width="480" height="180" rx="10" fill="#ffffff" opacity="0.88" filter="url(#shadowSunlitV)"/>
+  <rect x="40" y="380" width="480" height="220" rx="10" fill="#ffffff" opacity="0.88" filter="url(#shadowSunlitV)"/>
+  <rect x="40" y="620" width="480" height="140" rx="10" fill="#fffaf0" stroke="#f0d98a" stroke-width="2"
+        stroke-dasharray="4 3" filter="url(#shadowSunlitV)"/>
+
+  <!-- botanical vine, right margin -->
+  <g transform="translate(535,200)">
+    <path d="M0,0 C -6,-14 -4,-30 6,-40" stroke="#8a9a5b" stroke-width="2.5" fill="none"/>
+    <ellipse cx="4" cy="-32" rx="9" ry="5" fill="#a8bb7d" transform="rotate(-30 4 -32)"/>
+    <ellipse cx="10" cy="-42" rx="8" ry="4.5" fill="#8a9a5b" transform="rotate(10 10 -42)"/>
+  </g>
+
+  <!-- daisy blossom, bottom-left -->
+  <g transform="translate(60,800)">
+    <g fill="#fdf6e3" stroke="#e0c98a">
+      <ellipse cx="0" cy="-10" rx="4" ry="9" transform="rotate(0)"/>
+      <ellipse cx="0" cy="-10" rx="4" ry="9" transform="rotate(60)"/>
+      <ellipse cx="0" cy="-10" rx="4" ry="9" transform="rotate(120)"/>
+      <ellipse cx="0" cy="-10" rx="4" ry="9" transform="rotate(180)"/>
+      <ellipse cx="0" cy="-10" rx="4" ry="9" transform="rotate(240)"/>
+      <ellipse cx="0" cy="-10" rx="4" ry="9" transform="rotate(300)"/>
+    </g>
+    <circle cx="0" cy="0" r="5" fill="#f0a94e"/>
+  </g>
+
+  <!-- washi tape, bottom-right -->
+  <g transform="rotate(2 440 810)">
+    <rect x="390" y="798" width="100" height="24" fill="#e8763c" opacity="0.45"/>
+  </g>
+
+  <!-- torn edge flourish, bottom border -->
+  <path d="M 0,854 L 60,854 L 55,846 L 90,850 L 130,842 L 180,852 L 240,846 L 300,854 L 560,854 L 560,860 L 0,860 Z"
+        fill="#f7ecc9" opacity="0.7"/>
+
+  <!--
+    VIBE: sunlit-botanical   ORIENTATION: vertical
+    SLOTS:
+    title            x=60  y=100 w=440 h=50
+    feeling_block    x=60  y=190 w=440 h=160
+    gratitude_list   x=60  y=390 w=440 h=200
+    quote            x=60  y=630 w=440 h=120
+  -->
+</svg>

@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 130" width="100%" height="100%">
+  <defs>
+    <filter id="stamp4-shadow">
+      <feDropShadow dx="1" dy="2" stdDeviation="1.5" flood-color="#4a044e" flood-opacity="0.18"/>
+    </filter>
+  </defs>
+  <g filter="url(#stamp4-shadow)">
+    <rect x="4" y="4" width="92" height="122" fill="#fdf4ff" stroke="#f0abfc" stroke-width="1.5" stroke-dasharray="4,2"/>
+    <rect x="10" y="10" width="80" height="110" fill="#fdf2f8" stroke="#e879f9" stroke-width="1"/>
+    
+    <!-- Butterfly & Rose -->
+    <g transform="translate(50, 58)">
+      <!-- Butterfly wings -->
+      <path d="M0,0 C-15,-20 -28,-10 -22,8 C-18,18 -5,12 0,0" fill="#f472b6" opacity="0.85"/>
+      <path d="M0,0 C15,-20 28,-10 22,8 C18,18 5,12 0,0" fill="#f472b6" opacity="0.85"/>
+      <line x1="0" y1="-8" x2="0" y2="10" stroke="#831843" stroke-width="1.5"/>
+      <circle cx="-3" cy="-12" r="1" fill="#831843"/>
+      <circle cx="3" cy="-12" r="1" fill="#831843"/>
+    </g>
+
+    <text x="75" y="24" font-family="'Lora', serif" font-size="11" font-weight="bold" fill="#a21caf" text-anchor="middle">35¢</text>
+    <text x="50" y="114" font-family="'Caveat', cursive" font-size="9" fill="#86198f" text-anchor="middle">Papillon d'Or</text>
+  </g>
+</svg>

@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 45" width="100%" height="100%">
+  <defs>
+    <filter id="tape-shadow-kraft" x="-5%" y="-10%" width="110%" height="130%">
+      <feDropShadow dx="0" dy="2" stdDeviation="1.5" flood-color="#000" flood-opacity="0.12"/>
+    </filter>
+  </defs>
+  <g filter="url(#tape-shadow-kraft)">
+    <path d="M5,4 L195,4 L192,12 L196,20 L191,28 L196,36 L193,42 L5,42 L7,34 L4,26 L7,18 L4,10 Z" fill="#d7b189" fill-opacity="0.88" stroke="#b58a5e" stroke-width="0.75"/>
+    <path d="M10,22 L190,22" stroke="#8c6239" stroke-width="1" stroke-dasharray="4,4" opacity="0.4"/>
+  </g>
+</svg>

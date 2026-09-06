@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 130" width="100%" height="100%">
+  <defs>
+    <filter id="stamp5-shadow">
+      <feDropShadow dx="1" dy="2" stdDeviation="1.5" flood-color="#14532d" flood-opacity="0.18"/>
+    </filter>
+  </defs>
+  <g filter="url(#stamp5-shadow)">
+    <rect x="4" y="4" width="92" height="122" fill="#f0fdf4" stroke="#86efac" stroke-width="1.5" stroke-dasharray="4,2"/>
+    <rect x="10" y="10" width="80" height="110" fill="#fcfdfc" stroke="#4ade80" stroke-width="1"/>
+    
+    <!-- Botanical fern/sprig -->
+    <g transform="translate(50, 60)">
+      <path d="M0,32 Q-2,10 0,-18" stroke="#15803d" stroke-width="1.5" fill="none"/>
+      <path d="M0,18 Q-12,12 -16,6 Q-8,12 0,16" fill="#22c55e"/>
+      <path d="M0,14 Q12,8 16,2 Q8,8 0,12" fill="#22c55e"/>
+      <path d="M0,2 Q-10,-4 -14,-10 Q-6,-4 0,0" fill="#22c55e"/>
+      <path d="M0,-2 Q10,-8 14,-14 Q6,-8 0,-4" fill="#22c55e"/>
+      <path d="M0,-12 Q-6,-18 -8,-24 Q-2,-18 0,-14" fill="#22c55e"/>
+      <path d="M0,-14 Q6,-20 8,-26 Q2,-20 0,-16" fill="#22c55e"/>
+    </g>
+
+    <text x="75" y="24" font-family="'Lora', serif" font-size="11" font-weight="bold" fill="#15803d" text-anchor="middle">25</text>
+    <text x="50" y="114" font-family="'Caveat', cursive" font-size="9" fill="#166534" text-anchor="middle">Fern & Forest</text>
+  </g>
+</svg>

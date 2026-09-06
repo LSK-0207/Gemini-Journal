@@ -1,0 +1,53 @@
+{
+  "template_id": "sunlit-botanical-01",
+  "vibe": "sunlit-botanical",
+  "background_asset": "/assets/templates/sunlit-botanical-01.svg",
+  "width": 820,
+  "height": 500,
+  "slots": [
+    {
+      "slot_id": "title",
+      "kind": "heading",
+      "x": 60,
+      "y": 40,
+      "width": 420,
+      "height": 60,
+      "font": "handwritten-display",
+      "max_chars": 28,
+      "align": "left"
+    },
+    {
+      "slot_id": "feeling_block",
+      "kind": "paragraph",
+      "x": 60,
+      "y": 140,
+      "width": 380,
+      "height": 120,
+      "font": "handwritten-body",
+      "max_chars": 140,
+      "align": "left"
+    },
+    {
+      "slot_id": "gratitude_list",
+      "kind": "bullet_list",
+      "x": 60,
+      "y": 300,
+      "width": 380,
+      "height": 160,
+      "font": "handwritten-body",
+      "max_items": 3,
+      "max_chars_per_item": 40
+    },
+    {
+      "slot_id": "quote",
+      "kind": "paragraph",
+      "x": 480,
+      "y": 300,
+      "width": 300,
+      "height": 100,
+      "font": "handwritten-accent",
+      "max_chars": 60,
+      "align": "center"
+    }
+  ]
+}

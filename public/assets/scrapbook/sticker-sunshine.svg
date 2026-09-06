@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="100%" height="100%">
+  <defs>
+    <filter id="sunshine-shadow">
+      <feDropShadow dx="1" dy="2.5" stdDeviation="2" flood-color="#78350f" flood-opacity="0.2"/>
+    </filter>
+  </defs>
+  <g filter="url(#sunshine-shadow)">
+    <!-- White die-cut pill -->
+    <circle cx="60" cy="60" r="54" fill="#ffffff" stroke="#fef08a" stroke-width="2"/>
+    <circle cx="60" cy="60" r="48" fill="#fef9c3"/>
+    <!-- Cute sun face -->
+    <circle cx="60" cy="50" r="20" fill="#facc15"/>
+    <!-- Sun rays -->
+    <path d="M60,22 L60,16 M60,78 L60,84 M32,50 L26,50 M88,50 L94,50 M40,30 L35,25 M80,70 L85,75 M40,70 L35,75 M80,30 L85,25" stroke="#eab308" stroke-width="2.5" stroke-linecap="round"/>
+    <!-- Smiling eyes and mouth -->
+    <circle cx="53" cy="48" r="2.2" fill="#713f12"/>
+    <circle cx="67" cy="48" r="2.2" fill="#713f12"/>
+    <path d="M54,55 Q60,60 66,55" stroke="#713f12" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+    <!-- Blush cheeks -->
+    <circle cx="50" cy="53" r="2.5" fill="#f87171" opacity="0.6"/>
+    <circle cx="70" cy="53" r="2.5" fill="#f87171" opacity="0.6"/>
+    <!-- Caption -->
+    <text x="60" y="96" font-family="'Caveat', cursive" font-size="13" font-weight="bold" fill="#b45309" text-anchor="middle">sunshine ✨</text>
+  </g>
+</svg>

@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 130" width="100%" height="100%">
+  <defs>
+    <filter id="stamp6-shadow">
+      <feDropShadow dx="1" dy="2" stdDeviation="1.5" flood-color="#451a03" flood-opacity="0.2"/>
+    </filter>
+  </defs>
+  <g filter="url(#stamp6-shadow)">
+    <rect x="4" y="4" width="92" height="122" fill="#fafaf9" stroke="#d6d3d1" stroke-width="1.5" stroke-dasharray="4,2"/>
+    <rect x="10" y="10" width="80" height="110" fill="#fff" stroke="#a8a29e" stroke-width="1"/>
+    
+    <!-- Vintage feather quill and ink pot -->
+    <g transform="translate(50, 60)">
+      <path d="M-10,12 L10,12 L8,24 L-8,24 Z" fill="#78716c"/>
+      <!-- Ink well top -->
+      <ellipse cx="0" cy="12" rx="10" ry="3" fill="#57534e"/>
+      <!-- Quill feather -->
+      <path d="M2,12 Q18,-5 12,-26 Q4,-20 0,-5 Z" fill="#d6d3d1" stroke="#78716c" stroke-width="0.8"/>
+    </g>
+
+    <text x="75" y="24" font-family="'Lora', serif" font-size="11" font-weight="bold" fill="#57534e" text-anchor="middle">10</text>
+    <text x="50" y="114" font-family="'Caveat', cursive" font-size="9" fill="#57534e" text-anchor="middle">Memoria 1928</text>
+  </g>
+</svg>

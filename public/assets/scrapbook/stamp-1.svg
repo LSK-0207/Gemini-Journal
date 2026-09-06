@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 130" width="100%" height="100%">
+  <defs>
+    <filter id="stamp-shadow">
+      <feDropShadow dx="1" dy="2" stdDeviation="1.5" flood-color="#3d2c1d" flood-opacity="0.2"/>
+    </filter>
+  </defs>
+  <g filter="url(#stamp-shadow)">
+    <!-- Perforated Stamp Base -->
+    <rect x="4" y="4" width="92" height="122" fill="#faf5ee" stroke="#d5c7b3" stroke-width="1.5" stroke-dasharray="4,2"/>
+    <rect x="10" y="10" width="80" height="110" fill="#fdfbf7" stroke="#bfa07d" stroke-width="1"/>
+    
+    <!-- Stamp Illustration: Vintage Wildflowers -->
+    <g transform="translate(50, 62)">
+      <path d="M0,35 Q-2,10 0,-15" stroke="#713f12" stroke-width="1.5" fill="none"/>
+      <path d="M-2,15 Q-15,8 -10,0 Q-4,10 0,16" fill="#854d0e"/>
+      <path d="M0,-15 Q-12,-25 0,-32 Q12,-25 0,-15" fill="#ca8a04"/>
+      <circle cx="0" cy="-22" r="4" fill="#78350f"/>
+    </g>
+    
+    <!-- Postmark circle & wavy lines -->
+    <circle cx="28" cy="36" r="22" fill="none" stroke="#78350f" stroke-width="0.75" stroke-dasharray="2,1" opacity="0.6"/>
+    <path d="M28,25 Q38,28 48,25 M28,32 Q38,35 48,32 M28,39 Q38,42 48,39" stroke="#78350f" stroke-width="0.7" opacity="0.5"/>
+
+    <!-- Denomination -->
+    <text x="75" y="24" font-family="'Lora', serif" font-size="11" font-weight="bold" fill="#854d0e" text-anchor="middle">20</text>
+    <text x="75" y="32" font-family="'Lora', serif" font-size="7" fill="#854d0e" text-anchor="middle">AIR MAIL</text>
+    <text x="50" y="114" font-family="'Caveat', cursive" font-size="8" fill="#a16207" text-anchor="middle">Fleur de Jardin</text>
+  </g>
+</svg>

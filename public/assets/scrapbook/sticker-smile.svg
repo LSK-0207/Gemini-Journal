@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 110 110" width="100%" height="100%">
+  <defs>
+    <filter id="smile-shadow">
+      <feDropShadow dx="1" dy="2.5" stdDeviation="2" flood-color="#14532d" flood-opacity="0.18"/>
+    </filter>
+  </defs>
+  <g filter="url(#smile-shadow)">
+    <!-- Die-cut white border -->
+    <circle cx="55" cy="55" r="48" fill="#ffffff" stroke="#bbf7d0" stroke-width="2"/>
+    <!-- Sage green smiley face (from sample 2) -->
+    <circle cx="55" cy="55" r="42" fill="#86efac"/>
+    <ellipse cx="44" cy="48" rx="3.5" ry="5.5" fill="#166534"/>
+    <ellipse cx="66" cy="48" rx="3.5" ry="5.5" fill="#166534"/>
+    <path d="M38,62 Q55,78 72,62" fill="none" stroke="#166534" stroke-width="3.5" stroke-linecap="round"/>
+  </g>
+</svg>

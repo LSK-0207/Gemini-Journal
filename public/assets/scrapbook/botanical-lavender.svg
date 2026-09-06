@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 240" width="100%" height="100%">
+  <defs>
+    <filter id="lavender-shadow">
+      <feDropShadow dx="1" dy="2" stdDeviation="1.5" flood-color="#3c2f2f" flood-opacity="0.2"/>
+    </filter>
+  </defs>
+  <g filter="url(#lavender-shadow)">
+    <!-- Stem -->
+    <path d="M50,230 Q48,150 52,40" fill="none" stroke="#4d7c0f" stroke-width="2.5" stroke-linecap="round"/>
+    <!-- Leaves -->
+    <path d="M50,170 Q30,165 25,180 Q38,175 50,172" fill="#65a30d"/>
+    <path d="M50,185 Q70,180 75,195 Q62,190 50,187" fill="#65a30d"/>
+    <!-- Lavender buds along top stem -->
+    <g fill="#c084fc" stroke="#7e22ce" stroke-width="0.5">
+      <ellipse cx="44" cy="110" rx="6" ry="3.5" transform="rotate(-25 44 110)"/>
+      <ellipse cx="58" cy="106" rx="6" ry="3.5" transform="rotate(25 58 106)"/>
+      <ellipse cx="43" cy="94" rx="6" ry="3.5" transform="rotate(-20 43 94)"/>
+      <ellipse cx="59" cy="90" rx="6" ry="3.5" transform="rotate(20 59 90)"/>
+      <ellipse cx="44" cy="78" rx="5.5" ry="3.5" transform="rotate(-20 44 78)"/>
+      <ellipse cx="58" cy="75" rx="5.5" ry="3.5" transform="rotate(20 58 75)"/>
+      <ellipse cx="45" cy="62" rx="5" ry="3" transform="rotate(-15 45 62)"/>
+      <ellipse cx="57" cy="60" rx="5" ry="3" transform="rotate(15 57 60)"/>
+      <ellipse cx="47" cy="48" rx="4.5" ry="3" transform="rotate(-10 47 48)"/>
+      <ellipse cx="55" cy="47" rx="4.5" ry="3" transform="rotate(10 55 47)"/>
+      <ellipse cx="51" cy="35" rx="4" ry="4"/>
+    </g>
+    <g fill="#a855f7" opacity="0.6">
+      <circle cx="51" cy="108" r="2.5"/>
+      <circle cx="51" cy="92" r="2.5"/>
+      <circle cx="51" cy="76" r="2.5"/>
+      <circle cx="51" cy="61" r="2"/>
+    </g>
+  </g>
+</svg>

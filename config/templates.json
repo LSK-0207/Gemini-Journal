@@ -1,0 +1,40 @@
+{
+  "mood_to_vibe": {
+    "grateful": "sunlit-botanical",
+    "warm": "sunlit-botanical",
+    "summery": "sunlit-botanical",
+    "content": "sunlit-botanical",
+    "calm": "sage-affirmation",
+    "gentle": "sage-affirmation",
+    "encouraging": "sage-affirmation",
+    "hopeful": "sage-affirmation",
+    "tender": "dusty-rose-diary",
+    "cozy": "dusty-rose-diary",
+    "romantic": "dusty-rose-diary",
+    "sentimental": "dusty-rose-diary",
+    "moody": "dark-academia",
+    "introspective": "dark-academia",
+    "literary": "dark-academia",
+    "melancholy": "dark-academia",
+    "nostalgic": "kraft-vintage",
+    "wistful": "kraft-vintage",
+    "reflective_on_a_journey": "kraft-vintage"
+  },
+
+  "template_library": [
+    { "template_id": "sunlit-botanical-horizontal", "vibe": "sunlit-botanical", "orientation": "horizontal", "text_color": "#4a3b2a", "background_asset": "/assets/templates/sunlit-botanical-horizontal.svg" },
+    { "template_id": "sunlit-botanical-vertical",   "vibe": "sunlit-botanical", "orientation": "vertical",   "text_color": "#4a3b2a", "background_asset": "/assets/templates/sunlit-botanical-vertical.svg" },
+
+    { "template_id": "sage-affirmation-horizontal", "vibe": "sage-affirmation", "orientation": "horizontal", "text_color": "#4a5a3a", "background_asset": "/assets/templates/sage-affirmation-horizontal.svg" },
+    { "template_id": "sage-affirmation-vertical",   "vibe": "sage-affirmation", "orientation": "vertical",   "text_color": "#4a5a3a", "background_asset": "/assets/templates/sage-affirmation-vertical.svg" },
+
+    { "template_id": "dusty-rose-diary-horizontal", "vibe": "dusty-rose-diary", "orientation": "horizontal", "text_color": "#7a5c5c", "background_asset": "/assets/templates/dusty-rose-diary-horizontal.svg" },
+    { "template_id": "dusty-rose-diary-vertical",   "vibe": "dusty-rose-diary", "orientation": "vertical",   "text_color": "#7a5c5c", "background_asset": "/assets/templates/dusty-rose-diary-vertical.svg" },
+
+    { "template_id": "dark-academia-horizontal", "vibe": "dark-academia", "orientation": "horizontal", "text_color": "#2f2418", "background_asset": "/assets/templates/dark-academia-horizontal.svg" },
+    { "template_id": "dark-academia-vertical",   "vibe": "dark-academia", "orientation": "vertical",   "text_color": "#2f2418", "background_asset": "/assets/templates/dark-academia-vertical.svg" },
+
+    { "template_id": "kraft-vintage-horizontal", "vibe": "kraft-vintage", "orientation": "horizontal", "text_color": "#5a4632", "background_asset": "/assets/templates/kraft-vintage-horizontal.svg" },
+    { "template_id": "kraft-vintage-vertical",   "vibe": "kraft-vintage", "orientation": "vertical",   "text_color": "#5a4632", "background_asset": "/assets/templates/kraft-vintage-vertical.svg" }
+  ]
+}

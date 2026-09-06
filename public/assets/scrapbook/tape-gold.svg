@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 45" width="100%" height="100%">
+  <defs>
+    <filter id="tape-shadow-gold" x="-5%" y="-10%" width="110%" height="130%">
+      <feDropShadow dx="0" dy="2" stdDeviation="1.5" flood-color="#000" flood-opacity="0.12"/>
+    </filter>
+  </defs>
+  <g filter="url(#tape-shadow-gold)">
+    <path d="M5,4 L195,4 L193,12 L196,20 L191,28 L196,36 L193,42 L5,42 L7,34 L4,26 L7,18 L4,10 Z" fill="#fef08a" fill-opacity="0.82" stroke="#eab308" stroke-width="0.75" stroke-opacity="0.5"/>
+    <!-- vintage grid tape line -->
+    <path d="M10,16 L190,16 M10,28 L190,28" stroke="#ca8a04" stroke-width="0.75" stroke-dasharray="2,3" opacity="0.4"/>
+  </g>
+</svg>
