@@ -211,7 +211,7 @@ Automated scanners (such as GitHub Secret Scanning, Google Cloud Security Comman
 
 1. **Apply Google Cloud Console Key Restrictions (Crucial)**:
    - Go to [Google Cloud Console Credentials](https://console.cloud.google.com/apis/credentials).
-   - Select the API key used by Firebase (`AIzaSyDiq...`).
+   - Select the API key used by Firebase (`AIzaSy...`).
    - Under **Application restrictions**, select **Websites** (HTTP referrers) and add your allowed origins:
      - `https://ais-dev-*.run.app/*`
      - `https://your-custom-domain.com/*`
