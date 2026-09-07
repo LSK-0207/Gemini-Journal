@@ -19,16 +19,19 @@ import {
 } from 'firebase/firestore';
 import type { SavedInteraction, UserProfile } from './types';
 
-// Import the auto-provisioned configuration safely
+// Import the auto-provisioned configuration safely as default fallback
 import firebaseConfigJson from '../firebase-applet-config.json';
 
+// Support runtime environment variables (e.g. VITE_FIREBASE_API_KEY) with safe fallback to configuration file.
+// Note: Firebase Web API keys are public client identifiers used by client-side SDKs,
+// protected via API restrictions in Google Cloud Console and owner-bound Firestore security rules.
 const firebaseConfig = {
-  apiKey: firebaseConfigJson.apiKey,
-  authDomain: firebaseConfigJson.authDomain,
-  projectId: firebaseConfigJson.projectId,
-  storageBucket: firebaseConfigJson.storageBucket,
-  messagingSenderId: firebaseConfigJson.messagingSenderId,
-  appId: firebaseConfigJson.appId,
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || firebaseConfigJson.apiKey,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || firebaseConfigJson.authDomain,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || firebaseConfigJson.projectId,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || firebaseConfigJson.storageBucket,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || firebaseConfigJson.messagingSenderId,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID || firebaseConfigJson.appId,
 };
 
 // Initialize Firebase safely
@@ -39,7 +42,10 @@ const googleProvider = new GoogleAuthProvider();
 googleProvider.setCustomParameters({ prompt: 'select_account' });
 
 // Initialize Firestore with the dedicated database ID if provisioned
-const databaseId = firebaseConfigJson.firestoreDatabaseId || '(default)';
+const databaseId =
+  import.meta.env.VITE_FIRESTORE_DATABASE_ID ||
+  firebaseConfigJson.firestoreDatabaseId ||
+  '(default)';
 export const db = getFirestore(app, databaseId);
 
 /**

@@ -188,3 +188,49 @@ Every core user process and interaction can be validated using the following tes
 ### Test Case 6: Viewport Navigation Fit Across Breakpoints
 1. Test navigation at `375px` (Mobile), `768px` (Tablet), and `1280px` (Desktop).
 2. **Expected Result**: Header elements fit comfortably on a single horizontal row without wrapping or horizontal overflow. User display name is cleanly suppressed on compact viewports to preserve space for navigation tabs and theme controls.
+
+---
+
+## 8. Security Alerts & Key Management Hygiene Guide
+
+### Verification of Google API Key Alert (`firebase-applet-config.json#L4`)
+
+Automated scanners (such as GitHub Secret Scanning, Google Cloud Security Command Center, or Git Push Protection) flag any string matching pattern `AIzaSy...` as a potential credential leak.
+
+#### 1. Why Was It Flagged?
+* **Google's Unified Key Format**: Google Cloud uses the `AIzaSy` prefix for both **privileged server API keys** (e.g. Gemini, Maps with billing enabled) and **public Firebase web client configuration identifiers**.
+* Scanners cannot determine intent purely from regex, so they raise an alert for developer review.
+
+#### 2. Technical Risk & Architecture Boundary
+* **Server-Side Gemini API Key**: The application's Gemini API calls are strictly executed **server-side** inside `server.ts` using `process.env.GEMINI_API_KEY` (injected via Secret Manager in production). It is **never** bundled in frontend code or stored in `firebase-applet-config.json`.
+* **Firebase Web Client Key**: The `apiKey` in `firebase-applet-config.json` is the Firebase Web app identifier used by browser clients to communicate with Firebase Authentication and Firestore. In Firebase Web architectures, security is enforced by:
+  1. **Owner-Bound Firestore Rules** (`firestore.rules`): Unauthorized reads/writes are rejected even if someone has the web API key.
+  2. **Google Cloud Console API & HTTP Referrer Restrictions**: Restricting where and how the key can be used.
+
+#### 3. Recommended Remediation & Best Practices
+
+1. **Apply Google Cloud Console Key Restrictions (Crucial)**:
+   - Go to [Google Cloud Console Credentials](https://console.cloud.google.com/apis/credentials).
+   - Select the API key used by Firebase (`AIzaSyDiq...`).
+   - Under **Application restrictions**, select **Websites** (HTTP referrers) and add your allowed origins:
+     - `https://ais-dev-*.run.app/*`
+     - `https://your-custom-domain.com/*`
+     - `http://localhost:3000/*` (for local development)
+   - Under **API restrictions**, select **Restrict key** and limit it exclusively to:
+     - **Identity Toolkit API** (Firebase Auth)
+     - **Cloud Firestore API**
+     - *(Make sure "Generative Language API" is **UNCHECKED** so this key cannot be used for Gemini API calls).*
+   - Save changes.
+
+2. **Resolving the Alert in GitHub Secret Scanning**:
+   - Once API and website restrictions are verified in Google Cloud Console, open the alert on GitHub.
+   - Click **Close as** -> **Used in tests / Client-side code** (or **False positive** after confirming restrictions).
+
+3. **Using Environment Variables (Optional / Stricter Git Hygiene)**:
+   - The app supports overriding Firebase config via environment variables:
+     ```env
+     VITE_FIREBASE_API_KEY="your-restricted-web-api-key"
+     VITE_FIREBASE_PROJECT_ID="your-project-id"
+     VITE_FIREBASE_AUTH_DOMAIN="your-project-id.firebaseapp.com"
+     ```
+   - If you prefer not to commit `firebase-applet-config.json` in public repositories, add `firebase-applet-config.json` to `.gitignore` and supply these `VITE_FIREBASE_*` variables in your CI/CD pipeline or `.env`.

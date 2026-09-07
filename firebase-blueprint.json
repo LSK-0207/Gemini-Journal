@@ -1,0 +1,53 @@
+{
+  "entities": {
+    "Interaction": {
+      "title": "SavedInteraction",
+      "description": "User-authored scrapbook memory card, thought codex entry, and design spec.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the interaction document",
+          "maxLength": 128
+        },
+        "userId": {
+          "type": "string",
+          "description": "The UID of the owning authenticated user",
+          "maxLength": 128
+        },
+        "rawFragments": {
+          "type": "string",
+          "description": "Raw stream of consciousness thought dump",
+          "maxLength": 8000
+        },
+        "mood": {
+          "type": "string",
+          "description": "Mood keyword derived from thought synthesis",
+          "maxLength": 64
+        },
+        "templateId": {
+          "type": "string",
+          "description": "Identifier for the chosen layout template",
+          "maxLength": 64
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "ISO timestamp when the memory was created",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "ISO timestamp when the memory was last updated",
+          "format": "date-time"
+        }
+      },
+      "required": ["id", "userId", "rawFragments", "mood", "templateId", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}/interactions/{interactionId}": {
+      "schema": "Interaction",
+      "description": "Private owner-isolated scrapbook journal memories and design specs."
+    }
+  }
+}
