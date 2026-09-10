@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { ArrowLeft, BookmarkCheck, Download, RefreshCw, AlertCircle, Sparkles, FileText } from 'lucide-react';
+import { ArrowLeft, BookmarkCheck, Download, RefreshCw, AlertCircle, Sparkles, FileText, Bot } from 'lucide-react';
 import type { JournalDesignSpec } from '../types';
 import { TemplateCompositor, type TemplateCompositorRef } from './compositor/TemplateCompositor';
 
@@ -11,6 +11,7 @@ interface RenderedPageReviewProps {
   onBackToCanvas: () => void;
   isSaving: boolean;
   saveError: string | null;
+  creationSource?: 'canvas' | 'ai_chat';
 }
 
 export const RenderedPageReview: React.FC<RenderedPageReviewProps> = ({
@@ -20,6 +21,7 @@ export const RenderedPageReview: React.FC<RenderedPageReviewProps> = ({
   onBackToCanvas,
   isSaving,
   saveError,
+  creationSource,
 }) => {
   const compositorRef = useRef<TemplateCompositorRef | null>(null);
   const [svgString, setSvgString] = useState<string>('');
@@ -135,8 +137,16 @@ export const RenderedPageReview: React.FC<RenderedPageReviewProps> = ({
             <span className="p-1.5 rounded-lg bg-amber-200/80 text-amber-900">
               <Sparkles className="w-4 h-4" />
             </span>
-            <h4 className="font-serif font-bold text-sm sm:text-base text-stone-950">
-              Template: "{spec.template_id}" &bull; Mood: <span className="capitalize">{spec.mood}</span>
+            <h4 className="font-serif font-bold text-sm sm:text-base text-stone-950 flex flex-wrap items-center gap-2">
+              <span>Template: "{spec.template_id}"</span>
+              <span>&bull;</span>
+              <span>Mood: <span className="capitalize">{spec.mood}</span></span>
+              {creationSource === 'ai_chat' && (
+                <span className="inline-flex items-center gap-1 text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-900 border border-emerald-300">
+                  <Bot className="w-3 h-3 text-emerald-700" />
+                  Created by Chatting with AI
+                </span>
+              )}
             </h4>
           </div>
           <button

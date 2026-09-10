@@ -41,12 +41,38 @@ export const auth = getAuth(app);
 const googleProvider = new GoogleAuthProvider();
 googleProvider.setCustomParameters({ prompt: 'select_account' });
 
-// Initialize Firestore with the dedicated database ID if provisioned
-const databaseId =
-  import.meta.env.VITE_FIRESTORE_DATABASE_ID ||
-  firebaseConfigJson.firestoreDatabaseId ||
-  '(default)';
-export const db = getFirestore(app, databaseId);
+// Initialize Firestore with resilient database ID fallback:
+// If a custom database ID is provided (e.g., ai-studio-personalgeminijo-...), use it.
+// Bare UUID strings (e.g. "9eec64d4-92d0-45ef-b2b6-321a4f230ec7") indicate a missing prefix and should fallback to (default).
+function resolveDatabaseId(): string {
+  const customId =
+    import.meta.env.VITE_FIRESTORE_DATABASE_ID ||
+    firebaseConfigJson.firestoreDatabaseId ||
+    '';
+
+  const trimmed = String(customId).trim();
+  // Valid named databases follow a naming convention or are '(default)'
+  // Bare UUIDs without a prefix are invalid database instance names in GCP.
+  const isBareUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(trimmed);
+
+  if (!trimmed || isBareUuid) {
+    return '(default)';
+  }
+  return trimmed;
+}
+
+// Initialize Firestore with resilient database fallback
+const primaryDatabaseId = resolveDatabaseId();
+export const db = getFirestore(app, primaryDatabaseId);
+
+// Fallback to default instance if primary is not found
+let defaultDbInstance: ReturnType<typeof getFirestore> | null = null;
+function getDefaultDb() {
+  if (!defaultDbInstance) {
+    defaultDbInstance = getFirestore(app, '(default)');
+  }
+  return defaultDbInstance;
+}
 
 /**
  * Strict Undefined-Stripping (Zero-Crash Payload Hygiene)
@@ -92,6 +118,27 @@ export function onAuthUserChanged(callback: (user: UserProfile | null) => void) 
 }
 
 /**
+ * Helper to execute a Firestore operation with automatic fallback to (default) database if not found
+ */
+async function executeWithDbFallback<T>(
+  operation: (database: ReturnType<typeof getFirestore>) => Promise<T>
+): Promise<T> {
+  try {
+    return await operation(db);
+  } catch (err: any) {
+    const errorMsg = String(err?.message || err || '');
+    if (
+      (errorMsg.includes('not found') || errorMsg.includes('NOT_FOUND') || errorMsg.includes('Database')) &&
+      primaryDatabaseId !== '(default)'
+    ) {
+      console.warn(`Firestore database '${primaryDatabaseId}' not found. Falling back to '(default)' database.`);
+      return await operation(getDefaultDb());
+    }
+    throw err;
+  }
+}
+
+/**
  * Save an interaction securely isolated to the authenticated user's subcollection:
  * Path: /users/{userId}/interactions/{interactionId}
  */
@@ -109,8 +156,10 @@ export async function saveUserInteraction(
     updatedAt: new Date().toISOString(),
   });
 
-  const interactionDocRef = doc(db, 'users', userId, 'interactions', interaction.id);
-  await setDoc(interactionDocRef, sanitized);
+  await executeWithDbFallback(async (targetDb) => {
+    const interactionDocRef = doc(targetDb, 'users', userId, 'interactions', interaction.id);
+    await setDoc(interactionDocRef, sanitized);
+  });
 }
 
 /**
@@ -121,16 +170,18 @@ export async function fetchUserInteractions(userId: string): Promise<SavedIntera
     return [];
   }
 
-  const interactionsRef = collection(db, 'users', userId, 'interactions');
-  const q = query(interactionsRef, orderBy('createdAt', 'desc'));
-  const snapshot = await getDocs(q);
+  return await executeWithDbFallback(async (targetDb) => {
+    const interactionsRef = collection(targetDb, 'users', userId, 'interactions');
+    const q = query(interactionsRef, orderBy('createdAt', 'desc'));
+    const snapshot = await getDocs(q);
 
-  const results: SavedInteraction[] = [];
-  snapshot.forEach((docSnapshot) => {
-    results.push(docSnapshot.data() as SavedInteraction);
+    const results: SavedInteraction[] = [];
+    snapshot.forEach((docSnapshot) => {
+      results.push(docSnapshot.data() as SavedInteraction);
+    });
+
+    return results;
   });
-
-  return results;
 }
 
 /**
@@ -141,6 +192,9 @@ export async function deleteUserInteraction(
   interactionId: string
 ): Promise<void> {
   if (!userId || !interactionId) return;
-  const docRef = doc(db, 'users', userId, 'interactions', interactionId);
-  await deleteDoc(docRef);
+
+  await executeWithDbFallback(async (targetDb) => {
+    const docRef = doc(targetDb, 'users', userId, 'interactions', interactionId);
+    await deleteDoc(docRef);
+  });
 }

@@ -5,7 +5,7 @@ import dotenv from 'dotenv';
 import { GoogleGenAI, Type, type Schema } from '@google/genai';
 import { createServer as createViteServer } from 'vite';
 
-dotenv.config();
+dotenv.config({ override: true });
 
 // Load template library configuration from /config/templates.json
 let templatesConfig = {
@@ -173,6 +173,79 @@ async function generateJournalSpecWithFallback(prompt: string, systemInstruction
   throw lastError || new Error('All models in fallback ladder failed.');
 }
 
+/**
+ * Standard Helper: executes multi-turn conversational replies with the Gemini model ladder
+ */
+async function generateChatResponseWithFallback(
+  messages: Array<{ role: 'user' | 'model'; parts: Array<{ text: string }> }>,
+  systemInstruction: string
+) {
+  const client = getGeminiClient();
+  let lastError: unknown = null;
+
+  for (const modelName of MODEL_LADDER) {
+    try {
+      console.log(`[Gemini Chat Assistant] Attempting reply with model: ${modelName}`);
+      const response = await client.models.generateContent({
+        model: modelName,
+        contents: messages,
+        config: {
+          systemInstruction,
+          temperature: 0.7,
+        },
+      });
+
+      if (response && response.text) {
+        return { text: response.text, modelUsed: modelName };
+      }
+    } catch (err: any) {
+      lastError = err;
+      console.warn(`[Gemini Chat Assistant] Model ${modelName} failed, trying next fallback:`, err?.message || err);
+    }
+  }
+
+  throw lastError || new Error('All models in fallback ladder failed.');
+}
+
+/**
+ * Standard Helper: summarizes a multi-turn chat into a rich, structured raw journal entry
+ */
+async function summarizeChatToJournalWithFallback(
+  chatTranscriptText: string,
+  systemInstruction: string
+) {
+  const client = getGeminiClient();
+  let lastError: unknown = null;
+
+  for (const modelName of MODEL_LADDER) {
+    try {
+      console.log(`[Gemini Chat Summarizer] Attempting raw journal synthesis with model: ${modelName}`);
+      const response = await client.models.generateContent({
+        model: modelName,
+        contents: `Here is the conversation transcript between the user and their reflective journaling companion:
+"""
+${chatTranscriptText}
+"""
+
+Please synthesize this into an authentic, deeply expressive, structured raw journal entry. Include emotional feelings, key moments, bulleted gratitude items, and an uplifting quote or takeaway.`,
+        config: {
+          systemInstruction,
+          temperature: 0.6,
+        },
+      });
+
+      if (response && response.text) {
+        return { text: response.text, modelUsed: modelName };
+      }
+    } catch (err: any) {
+      lastError = err;
+      console.warn(`[Gemini Chat Summarizer] Model ${modelName} failed, trying next fallback:`, err?.message || err);
+    }
+  }
+
+  throw lastError || new Error('All models in fallback ladder failed.');
+}
+
 // Health check endpoint
 app.get('/api/health', (_req: Request, res: Response) => {
   res.json({
@@ -293,6 +366,107 @@ Please convert these fragments into the strict Journal Design Spec JSON followin
     console.error('[API /api/gemini/design-spec Error]:', error);
     return res.status(500).json({
       error: error.message || 'Failed to generate journal design spec.',
+      details: process.env.NODE_ENV !== 'production' ? String(error) : undefined,
+    });
+  }
+});
+
+/**
+ * API Route: /api/gemini/chat
+ * Handles multi-turn interactive chat between user and AI companion
+ */
+app.post('/api/gemini/chat', async (req: Request, res: Response) => {
+  try {
+    const body = req.body && typeof req.body === 'object' ? req.body : {};
+    const messages = Array.isArray(body.messages) ? body.messages : [];
+
+    if (messages.length === 0) {
+      return res.status(400).json({
+        error: 'Invalid input: "messages" array is required.',
+      });
+    }
+
+    // Convert messages to Gemini format: role 'user' | 'model'
+    const formattedContents = messages.map((m: any) => ({
+      role: m.sender === 'assistant' ? ('model' as const) : ('user' as const),
+      parts: [{ text: String(m.text || '').trim() }],
+    })).filter((m) => m.parts[0].text.length > 0);
+
+    if (formattedContents.length === 0) {
+      return res.status(400).json({
+        error: 'No valid message content provided.',
+      });
+    }
+
+    const systemPrompt = `You are a thoughtful, empathetic, warm, and attentive journaling companion.
+Your purpose is to help the user unpack their day, articulate their thoughts, reflect on emotions, celebrate wins, navigate curiosities or learning interests, and find moments of gratitude.
+- Listen deeply, validate their feelings with gentleness and sincere presence.
+- Keep your replies conversational, supportive, concise (usually 2-4 sentences per response), and gently exploratory.
+- Ask one organic, open-ended follow-up question that helps them reflect deeper without feeling grilled or overwhelmed.
+- Do NOT use clinical jargon, robotic affirmations, or overwhelming lists. Speak like a wise, compassionate friend sitting by a warm fireplace with a warm cup of tea.`;
+
+    const { text, modelUsed } = await generateChatResponseWithFallback(formattedContents, systemPrompt);
+
+    return res.json({
+      success: true,
+      modelUsed,
+      reply: text.trim(),
+    });
+  } catch (error: any) {
+    console.error('[API /api/gemini/chat Error]:', error);
+    return res.status(500).json({
+      error: error.message || 'Failed to generate chat response.',
+      details: process.env.NODE_ENV !== 'production' ? String(error) : undefined,
+    });
+  }
+});
+
+/**
+ * API Route: /api/gemini/summarize-chat
+ * Summarizes the entire multi-turn chat into an authentic, rich raw journal entry
+ */
+app.post('/api/gemini/summarize-chat', async (req: Request, res: Response) => {
+  try {
+    const body = req.body && typeof req.body === 'object' ? req.body : {};
+    const messages = Array.isArray(body.messages) ? body.messages : [];
+
+    if (messages.length === 0) {
+      return res.status(400).json({
+        error: 'Invalid input: "messages" array is required.',
+      });
+    }
+
+    // Build transcript text
+    const transcriptText = messages
+      .map((m: any) => `${m.sender === 'user' ? 'User' : 'Companion'}: ${String(m.text || '').trim()}`)
+      .join('\n\n');
+
+    const systemPrompt = `You are an expert personal memoirist and reflective journaling synthesizer.
+Your task is to take a conversational transcript between a user and their reflective companion, and synthesize it into an authentic, deeply expressive raw journal entry written strictly from the user's first-person perspective ("I", "my").
+
+The output MUST be formatted as an authentic raw journal stream with:
+1. An evocative reflective opening capturing what was on my mind and how I felt.
+2. Specific details, thoughts, lessons, or moments explored in the conversation.
+3. A bulleted gratitude list starting with "grateful for:" or "gratitude:".
+4. A memorable takeaway or quote line starting with 'quote: "..."' or 'reminder: ...'.
+
+Keep the tone deeply personal, poetic yet grounded, warm, and authentic.
+Do NOT mention "the AI told me" or "in our conversation". Write it entirely as the user's own raw reflective stream.`;
+
+    const { text: rawJournal, modelUsed } = await summarizeChatToJournalWithFallback(
+      transcriptText,
+      systemPrompt
+    );
+
+    return res.json({
+      success: true,
+      modelUsed,
+      rawJournal: rawJournal.trim(),
+    });
+  } catch (error: any) {
+    console.error('[API /api/gemini/summarize-chat Error]:', error);
+    return res.status(500).json({
+      error: error.message || 'Failed to summarize conversation into journal.',
       details: process.env.NODE_ENV !== 'production' ? String(error) : undefined,
     });
   }

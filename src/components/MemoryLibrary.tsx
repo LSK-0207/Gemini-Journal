@@ -13,6 +13,7 @@ import {
   LayoutGrid,
   RotateCcw,
   X,
+  Bot,
 } from 'lucide-react';
 import type { SavedInteraction } from '../types';
 import { StackedDeckView } from './StackedDeckView';
@@ -237,13 +238,20 @@ export const MemoryLibrary: React.FC<MemoryLibraryProps> = ({
                 {/* Card Content */}
                 <div className="p-4 flex-1 flex flex-col justify-between">
                   <div>
-                    <div className="flex items-center justify-between text-xs text-stone-600 mb-1">
-                      <span className="inline-flex items-center gap-1">
+                    <div className="flex items-center justify-between text-xs text-stone-600 mb-1 gap-1">
+                      <span className="inline-flex items-center gap-1 shrink-0">
                         <Calendar className="w-3 h-3 text-stone-500" /> {formattedDate}
                       </span>
-                      <span className="capitalize font-medium text-amber-950 bg-amber-200/90 px-2 py-0.5 rounded-md text-[11px] border border-amber-300/70">
-                        {item.templateId || item.designSpec?.template_id || 'sunlit-botanical-01'}
-                      </span>
+                      <div className="flex items-center gap-1.5 flex-wrap justify-end">
+                        {item.creationSource === 'ai_chat' && (
+                          <span className="inline-flex items-center gap-0.5 text-[10px] font-semibold px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-800 border border-emerald-300">
+                            <Bot className="w-2.5 h-2.5" /> AI
+                          </span>
+                        )}
+                        <span className="capitalize font-medium text-amber-950 bg-amber-200/90 px-2 py-0.5 rounded-md text-[11px] border border-amber-300/70">
+                          {item.templateId || item.designSpec?.template_id || 'sunlit-botanical-01'}
+                        </span>
+                      </div>
                     </div>
 
                     <h3 className="font-serif font-bold text-stone-900 text-lg group-hover:text-amber-950 transition-colors line-clamp-1">

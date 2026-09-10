@@ -8,6 +8,8 @@ import {
   Lightbulb,
   FileText,
   RotateCcw,
+  MessageSquareHeart,
+  Bot,
 } from 'lucide-react';
 import type { SavedInteraction } from '../types';
 
@@ -162,6 +164,15 @@ export const NotionPageView: React.FC<NotionPageViewProps> = ({
           <span>Thought Codex</span>
           <span className="opacity-60">&bull;</span>
           <span className="opacity-90">Raw Transcript</span>
+          {memory.creationSource === 'ai_chat' && (
+            <>
+              <span className="opacity-60">&bull;</span>
+              <span className="inline-flex items-center gap-1 text-emerald-300 font-semibold">
+                <Bot className="w-3 h-3" />
+                Created by Chatting with AI
+              </span>
+            </>
+          )}
         </div>
 
         {onFlipBack && (
@@ -223,10 +234,18 @@ export const NotionPageView: React.FC<NotionPageViewProps> = ({
 
           <div className="flex flex-col gap-1 min-w-0 bg-[#faf5eb] p-2.5 rounded-xl border border-amber-300/60 shadow-2xs">
             <span className="text-stone-500 font-medium flex items-center gap-1.5 text-[11px] uppercase tracking-wider">
-              <Lock className="w-3.5 h-3.5 text-emerald-700" /> Storage
+              {memory.creationSource === 'ai_chat' ? (
+                <>
+                  <Bot className="w-3.5 h-3.5 text-emerald-700" /> Origin
+                </>
+              ) : (
+                <>
+                  <Lock className="w-3.5 h-3.5 text-emerald-700" /> Storage
+                </>
+              )}
             </span>
-            <span className="font-semibold text-emerald-900 flex items-center gap-1 truncate">
-              Firestore Archival
+            <span className="font-semibold text-emerald-950 flex items-center gap-1 truncate">
+              {memory.creationSource === 'ai_chat' ? 'Chatting with AI' : 'Direct Canvas'}
             </span>
           </div>
         </div>
@@ -347,6 +366,36 @@ export const NotionPageView: React.FC<NotionPageViewProps> = ({
             }
           })}
         </div>
+
+        {/* Chat Transcript Section (If created via multi-turn chat) */}
+        {memory.chatTranscript && memory.chatTranscript.length > 0 && (
+          <div className="mt-8 p-4 rounded-2xl bg-[#efe4d2]/70 border border-amber-300/70">
+            <div className="flex items-center gap-2 mb-3">
+              <MessageSquareHeart className="w-4 h-4 text-indigo-700" />
+              <span className="font-serif font-bold text-sm text-stone-900">
+                Original Conversation Transcript ({memory.chatTranscript.length} messages)
+              </span>
+            </div>
+            <div className="space-y-2.5 max-h-60 overflow-y-auto pr-1 scrollbar-thin text-xs">
+              {memory.chatTranscript.map((msg, idx) => (
+                <div
+                  key={msg.id || idx}
+                  className={`p-2.5 rounded-xl border ${
+                    msg.sender === 'user'
+                      ? 'bg-[#35271c] text-amber-50 border-amber-900/40 ml-4'
+                      : 'bg-[#faf5eb] text-stone-900 border-amber-300/70 mr-4'
+                  }`}
+                >
+                  <div className="flex items-center justify-between text-[10px] opacity-75 mb-1 font-semibold">
+                    <span>{msg.sender === 'user' ? 'You' : 'Companion'}</span>
+                    <span>{msg.timestamp}</span>
+                  </div>
+                  <p className="whitespace-pre-wrap">{msg.text}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Read-Only Archival Note */}
         <div className="mt-8 pt-4 border-t border-amber-300/50 flex items-center justify-between text-[11px] text-stone-500">

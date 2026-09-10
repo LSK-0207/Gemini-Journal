@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
-import { BookMarked, Feather, Library, LogIn, LogOut, Sun, Moon, User as UserIcon } from 'lucide-react';
+import { BookMarked, Feather, Library, LogIn, LogOut, Sun, Moon, User as UserIcon, MessageSquareHeart } from 'lucide-react';
 import type { UserProfile, AppTheme } from '../types';
 
 interface NavbarProps {
   user: UserProfile | null;
-  activeView: 'canvas' | 'review' | 'library';
-  onNavigate: (view: 'canvas' | 'library') => void;
+  activeView: 'canvas' | 'chat' | 'review' | 'library';
+  onNavigate: (view: 'canvas' | 'chat' | 'library') => void;
   onSignIn: () => void;
   onSignOut: () => void;
   savedCount: number;
@@ -80,6 +80,22 @@ export const Navbar: React.FC<NavbarProps> = ({
               <Feather className="w-3.5 h-3.5 shrink-0 text-amber-700 dark:text-amber-400" />
               <span className="hidden lg:inline">Spatial </span>
               <span>Canvas</span>
+            </motion.button>
+            <motion.button
+              type="button"
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={() => onNavigate('chat')}
+              className={`flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 lg:px-4 py-1.5 sm:py-2 rounded-lg transition-all cursor-pointer whitespace-nowrap min-h-[34px] sm:min-h-[38px] ${
+                activeView === 'chat'
+                  ? 'bg-white dark:bg-[#201c18] text-stone-900 dark:text-amber-200 shadow-xs font-semibold'
+                  : 'text-stone-600 dark:text-stone-300 hover:text-stone-900 dark:hover:text-white hover:bg-white/40 dark:hover:bg-stone-700/50'
+              }`}
+              title="AI Reflective Companion Chat"
+            >
+              <MessageSquareHeart className="w-3.5 h-3.5 shrink-0 text-emerald-700 dark:text-emerald-400" />
+              <span className="hidden lg:inline">AI </span>
+              <span>Companion</span>
             </motion.button>
             <motion.button
               type="button"

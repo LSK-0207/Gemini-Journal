@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Sparkles, Feather, Lightbulb, RefreshCw, AlertCircle, LayoutTemplate, Dices } from 'lucide-react';
-import { getRandomStarters, getRandomPlaceholder } from '../data/fragmentPool';
+import { Sparkles, Feather, AlertCircle, LayoutTemplate, Dices } from 'lucide-react';
+import { getRandomPlaceholder } from '../data/fragmentPool';
+import { LoopingStarters } from './LoopingStarters';
 
 interface SpatialCanvasProps {
   onGenerate: (rawFragments: string) => Promise<void>;
   isLoading: boolean;
   errorMessage: string | null;
   onClearError: () => void;
+  onSwitchToChat?: () => void;
 }
 
 export const SpatialCanvas: React.FC<SpatialCanvasProps> = ({
@@ -15,15 +17,11 @@ export const SpatialCanvas: React.FC<SpatialCanvasProps> = ({
   isLoading,
   errorMessage,
   onClearError,
+  onSwitchToChat,
 }) => {
   // Empty initial text as requested, with a soft faded placeholder
   const [fragments, setFragments] = useState<string>('');
   const [placeholderText, setPlaceholderText] = useState<string>(() => getRandomPlaceholder());
-  const [currentStarters, setCurrentStarters] = useState<string[]>(() => getRandomStarters(9));
-
-  const handleShuffleStarters = () => {
-    setCurrentStarters(getRandomStarters(9));
-  };
 
   const handleShufflePlaceholder = () => {
     setPlaceholderText(getRandomPlaceholder());
@@ -188,45 +186,23 @@ export const SpatialCanvas: React.FC<SpatialCanvasProps> = ({
             </div>
           </div>
 
-          {/* Quick Starters & Prompt Inspiration */}
-          <div>
-            <div className="flex items-center justify-between gap-3 mb-3">
-              <div className="flex items-center gap-2 text-xs sm:text-sm font-semibold text-stone-800 uppercase tracking-wider">
-                <Lightbulb className="w-4 h-4 text-amber-700 shrink-0" />
-                <span>Fragment Starters</span>
-              </div>
-
-              <motion.button
-                whileHover={{ scale: 1.03 }}
-                whileTap={{ scale: 0.97 }}
-                type="button"
-                id="shuffle-starters-btn"
-                onClick={handleShuffleStarters}
-                className="inline-flex items-center gap-1.5 text-xs text-amber-950 font-semibold px-3.5 py-2 rounded-xl bg-amber-200/80 hover:bg-amber-300/80 border border-amber-300/80 transition-colors cursor-pointer min-h-[38px]"
-              >
-                <RefreshCw className="w-3.5 h-3.5" />
-                <span>Shuffle Starters</span>
-              </motion.button>
-            </div>
-
-            <div className="flex flex-wrap gap-2.5">
-              {currentStarters.map((starter, i) => (
-                <motion.button
-                  key={`${starter}-${i}`}
-                  whileHover={{ scale: 1.02, y: -1 }}
-                  whileTap={{ scale: 0.97 }}
-                  type="button"
-                  onClick={() => addStarter(starter)}
-                  className="text-xs sm:text-sm px-3.5 py-2 rounded-full bg-[#f3ebd9] hover:bg-amber-100 hover:border-amber-400 hover:text-amber-950 text-stone-900 transition-all border border-amber-200/90 text-left shadow-2xs cursor-pointer min-h-[38px] flex items-center"
-                >
-                  + {starter}
-                </motion.button>
-              ))}
-            </div>
+          {/* Quick Starters & Prompt Inspiration (Fading 4-item Looping Sets across all Vibes) */}
+          <div className="pt-2">
+            <LoopingStarters onAddStarter={addStarter} />
           </div>
 
           {/* Submit Action */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-end gap-3 pt-6 border-t border-amber-200/80">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-6 border-t border-amber-200/80">
+            {onSwitchToChat ? (
+              <button
+                type="button"
+                onClick={onSwitchToChat}
+                className="inline-flex items-center gap-2 text-xs font-semibold text-stone-700 hover:text-stone-950 underline decoration-amber-400 underline-offset-4 cursor-pointer"
+              >
+                <span>Prefer a guided conversation? Chat with AI companion &rarr;</span>
+              </button>
+            ) : <div />}
+
             <motion.button
               id="compose-scrapbook-btn"
               type="submit"
@@ -237,7 +213,7 @@ export const SpatialCanvas: React.FC<SpatialCanvasProps> = ({
             >
               {isLoading ? (
                 <>
-                  <RefreshCw className="w-4 h-4 animate-spin text-amber-300" />
+                  <Sparkles className="w-4 h-4 animate-spin text-amber-300" />
                   <span>Formatting Memory Flash Card...</span>
                 </>
               ) : (

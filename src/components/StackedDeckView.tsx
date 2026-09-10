@@ -13,6 +13,7 @@ import {
   FileText,
   Quote,
   Filter,
+  Bot,
 } from 'lucide-react';
 import type { SavedInteraction } from '../types';
 import { NotionPageView } from './NotionPageView';
@@ -318,6 +319,12 @@ export const StackedDeckView: React.FC<StackedDeckViewProps> = ({
                     {currentCard.mood && (
                       <span className="text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-amber-200/90 text-amber-950 border border-amber-300 capitalize">
                         {currentCard.mood}
+                      </span>
+                    )}
+                    {currentCard.creationSource === 'ai_chat' && (
+                      <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-900 border border-emerald-300 flex items-center gap-1">
+                        <Bot className="w-2.5 h-2.5 text-emerald-700" />
+                        AI Companion
                       </span>
                     )}
                   </div>

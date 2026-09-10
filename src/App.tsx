@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Navbar } from './components/Navbar';
 import { LandingHero } from './components/LandingHero';
 import { SpatialCanvas } from './components/SpatialCanvas';
+import { AiChatJournalCompanion } from './components/AiChatJournalCompanion';
 import { RenderedPageReview } from './components/RenderedPageReview';
 import { MemoryLibrary } from './components/MemoryLibrary';
 import { FeaturedMemoryHighlight } from './components/FeaturedMemoryHighlight';
@@ -16,7 +17,7 @@ import {
   fetchUserInteractions,
   deleteUserInteraction,
 } from './firebase';
-import type { UserProfile, SavedInteraction, JournalDesignSpec, AppTheme } from './types';
+import type { UserProfile, SavedInteraction, JournalDesignSpec, AppTheme, ChatMessage } from './types';
 
 export function App() {
   const [user, setUser] = useState<UserProfile | null>(null);
@@ -57,14 +58,16 @@ export function App() {
     }
   }, [theme]);
 
-  // App Navigation View: 'canvas' | 'review' | 'library'
-  const [activeView, setActiveView] = useState<'canvas' | 'review' | 'library'>('canvas');
+  // App Navigation View: 'canvas' | 'chat' | 'review' | 'library'
+  const [activeView, setActiveView] = useState<'canvas' | 'chat' | 'review' | 'library'>('canvas');
 
   // Generation State
   const [rawFragments, setRawFragments] = useState<string>('');
   const [currentSpec, setCurrentSpec] = useState<JournalDesignSpec | null>(null);
   const [isGenerating, setIsGenerating] = useState<boolean>(false);
   const [generationError, setGenerationError] = useState<string | null>(null);
+  const [creationSource, setCreationSource] = useState<'canvas' | 'ai_chat'>('canvas');
+  const [activeChatTranscript, setActiveChatTranscript] = useState<ChatMessage[] | undefined>(undefined);
 
   // Firestore Interactions State
   const [savedInteractions, setSavedInteractions] = useState<SavedInteraction[]>([]);
@@ -152,10 +155,16 @@ export function App() {
   //    yielding strict JournalDesignSpec JSON with slot limits
   // 2. Rendering Stage: Local compositor renders the page deterministically against
   //    the matching template asset (zero marginal cost)
-  const handleGenerateSpec = async (fragments: string) => {
+  const handleGenerateSpec = async (
+    fragments: string,
+    source: 'canvas' | 'ai_chat' = 'canvas',
+    transcript?: ChatMessage[]
+  ) => {
     setIsGenerating(true);
     setGenerationError(null);
     setRawFragments(fragments);
+    setCreationSource(source);
+    setActiveChatTranscript(transcript);
 
     try {
       const res = await fetch('/api/gemini/design-spec', {
@@ -178,13 +187,25 @@ export function App() {
 
       setCurrentSpec(spec);
       setActiveView('review');
-      showToast(`Composited memory flash card for template "${spec.template_id}"!`);
+      showToast(
+        source === 'ai_chat'
+          ? `Synthesized chat into memory flash card "${spec.title}"!`
+          : `Composited memory flash card for template "${spec.template_id}"!`
+      );
     } catch (err: any) {
       console.error('Generation Error:', err);
       setGenerationError(err.message || 'Failed to analyze thoughts and fit to template.');
     } finally {
       setIsGenerating(false);
     }
+  };
+
+  // Callback when AI Chat Companion synthesizes a raw journal from conversation
+  const handleJournalSummarizedFromChat = async (
+    rawJournal: string,
+    chatTranscript: ChatMessage[]
+  ) => {
+    await handleGenerateSpec(rawJournal, 'ai_chat', chatTranscript);
   };
 
   // Save rendered page to Firestore isolated to current user
@@ -207,6 +228,8 @@ export function App() {
       renderedSvg,
       templateId: currentSpec.template_id || 'sunlit-botanical-01',
       mood: currentSpec.mood,
+      creationSource,
+      chatTranscript: activeChatTranscript,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     };
@@ -298,10 +321,21 @@ export function App() {
                 />
 
                 <SpatialCanvas
-                  onGenerate={handleGenerateSpec}
+                  onGenerate={(fragments) => handleGenerateSpec(fragments, 'canvas')}
                   isLoading={isGenerating}
                   errorMessage={generationError}
                   onClearError={() => setGenerationError(null)}
+                  onSwitchToChat={() => setActiveView('chat')}
+                />
+              </div>
+            )}
+
+            {activeView === 'chat' && (
+              <div className="py-6">
+                <AiChatJournalCompanion
+                  onJournalSummarized={handleJournalSummarizedFromChat}
+                  isProcessing={isGenerating}
+                  onSwitchToCanvas={() => setActiveView('canvas')}
                 />
               </div>
             )}
@@ -311,9 +345,10 @@ export function App() {
                 spec={currentSpec}
                 rawFragments={rawFragments}
                 onSaveToLibrary={handleSaveToLibrary}
-                onBackToCanvas={() => setActiveView('canvas')}
+                onBackToCanvas={() => setActiveView(creationSource === 'ai_chat' ? 'chat' : 'canvas')}
                 isSaving={isSaving}
                 saveError={saveError}
+                creationSource={creationSource}
               />
             )}
 

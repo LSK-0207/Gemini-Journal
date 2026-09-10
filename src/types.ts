@@ -75,6 +75,13 @@ export interface JournalDesignSpec {
   };
 }
 
+export interface ChatMessage {
+  id: string;
+  sender: 'user' | 'assistant';
+  text: string;
+  timestamp: string;
+}
+
 export interface SavedInteraction {
   id: string;
   userId: string;
@@ -86,6 +93,8 @@ export interface SavedInteraction {
   renderedSvg: string; // Sanitized vector SVG markup
   templateId: string;
   mood?: string;
+  creationSource?: 'canvas' | 'ai_chat';
+  chatTranscript?: ChatMessage[];
 }
 
 export interface UserProfile {
